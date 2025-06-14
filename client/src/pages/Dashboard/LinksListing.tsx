@@ -22,7 +22,7 @@ const LinksListing: React.FC = () => {
 
   return (
     <div className="min-h-screen p-6">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-6xl mx-auto space-y-8">
         {error && <ErrorMessage message={error} onRetry={refetch} onDismiss={clearError} />}
 
         <div className="flex items-center justify-between relative">
@@ -55,7 +55,7 @@ const LinksListing: React.FC = () => {
             <LoadingSkeleton />
           ) : links.length > 0 ? (
             <div className="space-y-4">
-              <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
                 {links.map((link, index) => (
                   <LinkCard key={link._id} link={link} onDelete={deleteLink} index={index} />
                 ))}

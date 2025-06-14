@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import useAuthStore from "@/zustand/useAuthStore";
 import { LoginUser } from "@/api";
 import type { AuthState } from "@/zustand/useAuthStore";
+import { toast, Toaster } from "react-hot-toast";
 
 const LoginPage: React.FC = () => {
   const [form, setForm] = useState({ username: "", password: "" });
@@ -34,10 +35,10 @@ const LoginPage: React.FC = () => {
     try {
       const res = await LoginUser(form.username, form.password);
       if (!res.success) {
-        alert("Login failed");
+        toast.error(res.message);
         return;
       }
-
+      toast.success(res.message);
       login(res.user, res.token);
       navigate("/dashboard");
     } catch (err) {
@@ -50,7 +51,12 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-950 relative">
-      
+      <Toaster
+  position="top-right"
+  reverseOrder={false}
+/>
+
+
       <button
         onClick={() => navigate("/")}
         className="absolute top-6 left-6 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:underline"

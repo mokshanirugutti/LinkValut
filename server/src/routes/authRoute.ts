@@ -11,12 +11,17 @@ const router = Router();
 
 const validateRegistration = (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         userRegistrationSchema.parse(req.body);
         next();
     } catch (error) {
         if (error instanceof ZodError) {
-            res.status(400).json({ error: error });
+            const formattedErrors = error.errors.map(err => ({
+                field: err.path.join('.'),
+                message: err.path[0] + " " + err.code
+            }));
+            const firstError = formattedErrors[0];
+            res.status(400).json({ error: firstError.message });
         }
     }
 };

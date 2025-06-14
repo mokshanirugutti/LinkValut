@@ -4,6 +4,7 @@ import { Plus, LinkIcon, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock"
+import { toast, Toaster } from "react-hot-toast"
 
 interface CreateLinkFormProps {
     onSubmit: (data: { title: string; url: string; tags: string[] }) => Promise<boolean>
@@ -22,15 +23,17 @@ export const CreateLinkForm: React.FC<CreateLinkFormProps> = ({ onSubmit, isLoad
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        toast.loading("Saving link...")
         const success = await onSubmit({
             title: formData.title,
             url: formData.url,
             tags: formData.tags,
         })
-
+        toast.dismiss()
         if (success) {
             setFormData({ title: "", url: "", tags: [], currentTag: "" })
             setIsExpanded(false)
+            toast.success("Link Saved successfully")
         }
     }
 
@@ -61,7 +64,11 @@ export const CreateLinkForm: React.FC<CreateLinkFormProps> = ({ onSubmit, isLoad
     return (
 
         <div className="relative">
-            
+            <Toaster
+  position="top-right"
+  reverseOrder={false}
+/>
+
             {!isExpanded && (
                 <button
                     onClick={() => setIsExpanded(true)}

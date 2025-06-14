@@ -19,8 +19,8 @@ A Web app for managing and organizing links with tags, built with React, Tailwin
 
 1. Clone the repository
 ```bash
-git clone https://github.com/mokshanirugutti/linkVault.git
-cd linkVault
+git clone https://github.com/mokshanirugutti/LinkVault.git
+cd LinkVault
 ```
 
 2. Install dependencies

@@ -3,6 +3,7 @@ import { useState } from "react"
 import { ExternalLink, Trash2, Tag, Copy, Check,  AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { Link } from "@/types"
+import { toast, Toaster } from "react-hot-toast"
 
 interface LinkCardProps {
   link: Link
@@ -20,6 +21,8 @@ export const LinkCard: React.FC<LinkCardProps> = ({ link, onDelete, index }) => 
     await onDelete(link._id)
     setIsDeleting(false)
     setShowDeleteModal(false)
+    toast.success("Link deleted successfully")
+  
   }
 
   const copyToClipboard = async () => {
@@ -34,17 +37,21 @@ export const LinkCard: React.FC<LinkCardProps> = ({ link, onDelete, index }) => 
 
   return (
     <>
+    <Toaster
+  position="top-right"
+  reverseOrder={false}
+/>
       <div
         className={`
           group  bg-white/10 border  rounded-2xl p-6 z-0
           hover:bg-white/15 hover:border-black/40 hover:shadow-2xl
           transition-all duration-500 ease-out transform hover:scale-[1.02]
-          animate-in slide-in-from-bottom-4 fade-in-0 max-w-96 border-2 border-black/20
+          animate-in slide-in-from-bottom-4 fade-in-0 w-[20rem] border-2 border-black/20 mx-auto 
         `}
         style={{ animationDelay: `${index * 100}ms` }}
       >
         <div className="flex items-start justify-between gap-4">
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 w-full ">
             <h3 className="text-lg font-bold  mb-2 truncate  transition-colors">
               {link.title}
             </h3>
@@ -69,7 +76,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({ link, onDelete, index }) => 
             </div>
 
             {link.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap gap-2 mb-4 w-full min-w-0">
                 {link.tags.map((tag, tagIndex) => (
                   <span
                     key={tagIndex}
@@ -87,7 +94,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({ link, onDelete, index }) => 
             )}
           </div>
 
-          <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="flex gap-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <Button
               variant="outline"
               size="sm"

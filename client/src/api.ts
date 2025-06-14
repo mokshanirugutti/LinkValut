@@ -20,7 +20,7 @@ const getAuthHeader = (): Record<string, string> => {
   return token ? { 'Authorization': `Bearer ${token}` } : {};
 };
 
-const RegisterUser = async (formData: RegisterFormData): Promise<{ message: string; user: User; token: string }> => {
+const RegisterUser = async (formData: RegisterFormData): Promise<{ success: boolean; message: string; user: User; token: string }> => {
   const response = await fetch(`${backendUrl}/api/auth/register`, {
     method: 'POST',
     headers: {
@@ -35,18 +35,24 @@ const RegisterUser = async (formData: RegisterFormData): Promise<{ message: stri
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || 'Registration failed');
+    return {
+      success: false,
+      message: errorData.error  || 'Registration failed',
+      user: {} as User,
+      token: ""
+    };
   }
 
   const data = await response.json();
   return {
+    success: true,
     message: data.message,
     user: data.user as User,
     token: data.token
   };
 };
 
-const LoginUser = async (username: string, password: string): Promise<{ success: boolean; token: string; user: User }> => {
+const LoginUser = async (username: string, password: string): Promise<{ success: boolean; token: string; user: User , message: string}> => {
   const response = await fetch(`${backendUrl}/api/auth/login`, {
     method: 'POST',
     headers: {
@@ -57,16 +63,22 @@ const LoginUser = async (username: string, password: string): Promise<{ success:
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || 'Login failed');
+
+    return {
+      success: false,
+      token: "",
+      user: {} as User,
+      message: errorData.error || 'Login failed',
+    };
   }
 
   const data = await response.json();
-  console.log("GOT THIS DATA FOR USER");  
-  console.log(data.user);
+
   return {
     success: true,
     token: data.token,
     user: data.user as User,
+    message: data.message,
   };
 };
 

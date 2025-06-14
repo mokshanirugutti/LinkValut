@@ -54,9 +54,9 @@ export default function UserActions() {
         </DropdownMenuGroup>
         
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-red-500  cursor-pointer">
+        <DropdownMenuItem className="text-red-500  cursor-pointer" onClick={handleLogout}>
           <LogOutIcon size={16} className="opacity-60 " aria-hidden="true" />
-          <span onClick={handleLogout}>Logout</span>
+          <span >Logout</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,6 +1,7 @@
 import { RegisterUser } from "@/api";
 import useAuthStore from "@/zustand/useAuthStore";
 import React, { useState } from "react";
+import { toast, Toaster } from "react-hot-toast";
 
 
 import { useNavigate } from "react-router";
@@ -15,6 +16,7 @@ const RegisterPage: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<Partial<typeof form>>({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -36,21 +38,30 @@ const RegisterPage: React.FC = () => {
     const newErrors = validate();
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
+      setLoading(true);
       try {
         
         const response = await RegisterUser(form);
-  
+
+        if(!response.success){
+          toast.error(response.message);
+          return;
+        }
+        toast.success(response.message);
         
-        console.log(response);
+        
         useAuthStore.getState().login(response.user, response.token);
         const setEmail = useAuthStore.getState().setEmail;
         setEmail(form.email);
+
   
         
         navigate(`/dashboard`); 
       } catch (error) {
         console.error('Registration failed', error);
         
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -58,7 +69,10 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-950">
-  
+   <Toaster
+  position="top-right"
+  reverseOrder={false}
+/>
   <div className="flex flex-col justify-center w-full max-w-2xl px-10 pt-12 lg:px-20 mx-auto">
     <div className="mb-12">
       <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
@@ -143,8 +157,9 @@ const RegisterPage: React.FC = () => {
         <button
           type="submit"
           className="w-full py-3 px-6 rounded-lg bg-gray-900 text-white hover:bg-gray-800 transition font-semibold"
+          disabled={loading}
         >
-          Create Account
+          {loading ? "Creating Account..." : "Create Account"}
         </button>
       </div>
     </form>
