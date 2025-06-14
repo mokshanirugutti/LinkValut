@@ -21,7 +21,7 @@ const LoginPage: React.FC = () => {
   const validate = () => {
     const newErrors: Partial<typeof form> = {};
     if (!form.username ) newErrors.username = "Valid username is required";
-    if (form.password.length < 6) newErrors.password = "Password must be at least 6 characters";
+    if (form.password.length < 8) newErrors.password = "Password must be at least 8 characters";
     return newErrors;
   };
 

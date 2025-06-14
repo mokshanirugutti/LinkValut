@@ -28,7 +28,7 @@ const RegisterPage: React.FC = () => {
     const newErrors: Partial<typeof form> = {};
     if (!form.username.trim()) newErrors.username = "Username is required";
     if (!form.email.includes("@")) newErrors.email = "Valid email is required";
-    if (form.password.length < 6) newErrors.password = "Password must be at least 6 characters";
+    if (form.password.length < 8) newErrors.password = "Password must be at least 8 characters";
    
     return newErrors;
   };
